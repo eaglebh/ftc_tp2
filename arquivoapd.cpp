@@ -1,0 +1,34 @@
+#include "arquivoapd.h"
+#include <iostream>
+#include <fstream>
+
+ArquivoApd::ArquivoApd(string nomeArquivo)
+{
+    string linha = "";
+    ifstream arquivoApd(nomeArquivo.c_str(), std::ifstream::in);
+std::cout << "const " << std::endl;
+    EstadosLeitura* estadosLeitura = new LerEstados();
+    while(arquivoApd.good()) {
+        getline(arquivoApd, linha);
+        std::cout << "linha = " << linha << std::endl;
+        EstadosLeitura* pEstadosLeitura = estadosLeitura;
+        estadosLeitura = estadosLeitura->ler(this, linha);
+        delete pEstadosLeitura;
+    }
+
+
+}
+
+Apd ArquivoApd::getApd()
+{
+    Apd apd;
+
+    apd.setEstados(this->estados);
+    apd.setAlfabetoFita(this->alfabetoFita);
+    apd.setAlfabetoPilha(this->alfabetoPilha);
+    apd.setTransicoes(this->transicoes);
+    apd.setEstadoInicial(this->estadoInicial);
+    apd.setEstadosFinais(this->estadosFinais);
+
+    return apd;
+}

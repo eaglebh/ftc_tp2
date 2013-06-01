@@ -7,16 +7,16 @@
 class Transicao
 {
 private:
-    Estado estadoAtual;
-    Simbolo simboloEntrada;
-    Simbolo simboloADesemplilhar;
+    Estado* estadoAtual;
+    Simbolo* simboloEntrada;
+    Simbolo* simboloADesemplilhar;
 
-    Estado estadoSeguinte;
-    Simbolo simboloAEmpilhar;
+    Estado* estadoSeguinte;
+    Simbolo* simboloAEmpilhar;
 
 public:
-    Transicao(Estado estadoAtual, Simbolo simboloEntrada, Simbolo simboloADesemplilhar,
-              Estado estadoSeguinte, Simbolo simboloAEmpilhar);
+    Transicao(Estado* estadoAtual, Simbolo* simboloEntrada, Simbolo* simboloADesemplilhar,
+              Estado* estadoSeguinte, Simbolo* simboloAEmpilhar);
 };
 
 #endif // TRANSICAO_H
