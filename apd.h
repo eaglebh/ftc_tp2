@@ -29,6 +29,8 @@ public:
 
     void setEstadoInicial(Estado* estadoInicial);
     void setEstadosFinais(list<Estado*> estadosFinais);
+
+    void imprimir();
 };
 
 #endif // APD_H

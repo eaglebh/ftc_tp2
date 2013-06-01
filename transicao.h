@@ -9,14 +9,16 @@ class Transicao
 private:
     Estado* estadoAtual;
     Simbolo* simboloEntrada;
-    Simbolo* simboloADesemplilhar;
+    Simbolo* simboloADesempilhar;
 
     Estado* estadoSeguinte;
-    Simbolo* simboloAEmpilhar;
+    Simbolo* simbolosAEmpilhar;
 
 public:
-    Transicao(Estado* estadoAtual, Simbolo* simboloEntrada, Simbolo* simboloADesemplilhar,
-              Estado* estadoSeguinte, Simbolo* simboloAEmpilhar);
+    Transicao(Estado* estadoAtual, Simbolo* simboloEntrada, Simbolo* simboloADesempilhar,
+              Estado* estadoSeguinte, Simbolo* simbolosAEmpilhar);
+    string texto();
+    void imprimir();
 };
 
 #endif // TRANSICAO_H

@@ -13,6 +13,8 @@ public:
 
     Simbolo(string nome);
     bool igual(const Simbolo outro);
+    string texto();
+    void imprimir();
 
 private:
     string nome;

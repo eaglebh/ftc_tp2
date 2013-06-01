@@ -1,6 +1,9 @@
 #include "estado.h"
+#include <iostream>
 
 unsigned int Estado::chaveAtual = 1;
+
+using namespace std;
 
 Estado::Estado(string nome):
     nome(nome)
@@ -19,4 +22,14 @@ unsigned int Estado::geraChaveDeEstado() {
 
 void Estado::reiniciaChaveDeEstado(){
     chaveAtual = 1;
+}
+
+string Estado::texto()
+{
+    return this->nome;
+}
+
+void Estado::imprimir()
+{
+    cout << "estado=" << texto() << endl;
 }

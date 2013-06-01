@@ -20,6 +20,9 @@ public:
     bool igual(const Estado outro);
 
     static void reiniciaChaveDeEstado();
+
+    string texto();
+    void imprimir();
 };
 
 #endif // ESTADO_H

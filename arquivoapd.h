@@ -4,6 +4,9 @@
 #include "apd.h"
 #include <sstream>
 #include <iostream>
+#include <algorithm>
+#include <stdio.h>
+#include <string.h>
 
 class ArquivoApd
 {
@@ -18,22 +21,24 @@ private:
     class EstadosLeitura
     {
     public:
-        static EstadosLeitura* ler(ArquivoApd *arquivoApd, string linha){
+        /*EstadosLeitura* ler(ArquivoApd *arquivoApd, string linha){
             std::cout << "padrao " << std::endl;
-        }
+        }*/
+
+        virtual EstadosLeitura* ler(ArquivoApd *arquivoApd, string linha) = 0;
     };
 
     class LerEstados : public EstadosLeitura {
-        static EstadosLeitura* ler(ArquivoApd *arquivoApd, string linha) {
+        EstadosLeitura* ler(ArquivoApd *arquivoApd, string linha) {
             std::stringstream estado;
             for ( std::string::iterator it=linha.begin(); it!=linha.end(); ++it) {
                 if( (*it) == ' ' || (*it) == ';') {
                     if(estado.str() != "") {
-                        std::cout << "estado = " << estado;
+                        std::cout << "estado = " << estado.str() << std::endl;
                         arquivoApd->estados.push_back(Estado(estado.str()));
                     }
 
-                    estado.clear();
+                    estado.str("");
                     if( (*it) == ';') {
                         break;
                     }
@@ -47,7 +52,7 @@ private:
     };
 
     class LerAlfabetoFita : public EstadosLeitura {
-        static EstadosLeitura* ler(ArquivoApd *arquivoApd, string linha) {
+        EstadosLeitura* ler(ArquivoApd *arquivoApd, string linha) {
             std::stringstream simbolo;
             for ( std::string::iterator it=linha.begin(); it!=linha.end(); ++it) {
                 if( (*it) == ' ' || (*it) == ';') {
@@ -55,7 +60,7 @@ private:
                         arquivoApd->alfabetoFita.push_back(Simbolo(simbolo.str()));
                     }
 
-                    simbolo.clear();
+                    simbolo.str("");
                     if( (*it) == ';') {
                         break;
                     }
@@ -69,7 +74,7 @@ private:
     };
 
     class LerAlfabetoPilha : public EstadosLeitura {
-        static EstadosLeitura* ler(ArquivoApd *arquivoApd, string linha) {
+        EstadosLeitura* ler(ArquivoApd *arquivoApd, string linha) {
             std::stringstream simbolo;
             for ( std::string::iterator it=linha.begin(); it!=linha.end(); ++it) {
                 if( (*it) == ' ' || (*it) == ';') {
@@ -77,7 +82,7 @@ private:
                         arquivoApd->alfabetoPilha.push_back(Simbolo(simbolo.str()));
                     }
 
-                    simbolo.clear();
+                    simbolo.str("");
                     if( (*it) == ';') {
                         break;
                     }
@@ -91,29 +96,79 @@ private:
     };
 
     class LerTransicoes : public EstadosLeitura {
-        static EstadosLeitura* ler(ArquivoApd *arquivoApd, string linha) {
+        EstadosLeitura* ler(ArquivoApd *arquivoApd, string linha) {
             std::stringstream estado;
-            for ( std::string::iterator it=linha.begin(); it!=linha.end(); ++it) {
-                if( (*it) == ' ' || (*it) == ';') {
-                    if(estado.str() != "") {
-                        arquivoApd->estados.push_back(Estado(estado.str()));
-                    }
-
-                    estado.clear();
-                    if( (*it) == ';') {
-                        break;
-                    }
-                    continue;
-                }
-
-                estado << *it;
+            linha.erase(remove_if(linha.begin(), linha.end(), (int(*)(int))isspace), linha.end());
+            // remove abertura de parenteses (
+            linha.erase(0,1);
+            // remove fechamento de parenteses (
+            linha.erase(linha.length()-2,1);
+            bool ultimaTransicao = (linha.at(linha.length()-1) == ';');
+            if(ultimaTransicao) {
+                // remove ponto e virgula final ;
+                linha.erase(linha.length()-1,1);
             }
-            return new LerEstadoInicial();
+
+            char * c_linha = (char*)linha.c_str();
+            char * pch = strtok (c_linha,",");
+
+            Estado* estadoAtual = new Estado(pch);
+            for (std::list<Estado>::iterator it=arquivoApd->estados.begin(); it != arquivoApd->estados.end(); ++it){
+                if(estadoAtual->igual(*it)) {
+                    estadoAtual = &(*it);
+                    break;
+                }
+            }
+
+            pch = strtok (NULL,",");
+            Simbolo* simboloEntrada = new Simbolo(pch);
+            for (std::list<Simbolo>::iterator it=arquivoApd->alfabetoFita.begin(); it != arquivoApd->alfabetoFita.end(); ++it){
+                if(simboloEntrada->igual(*it)) {
+                    simboloEntrada = &(*it);
+                    break;
+                }
+            }
+
+            pch = strtok (NULL,",");
+            Simbolo* simboloADesempilhar = new Simbolo(pch);
+            for (std::list<Simbolo>::iterator it=arquivoApd->alfabetoPilha.begin(); it != arquivoApd->alfabetoPilha.end(); ++it){
+                if(simboloADesempilhar->igual(*it)) {
+                    simboloADesempilhar = &(*it);
+                    break;
+                }
+            }
+
+            pch = strtok (NULL,",");
+            Estado* estadoSeguinte = new Estado(pch);
+            for (std::list<Estado>::iterator it=arquivoApd->estados.begin(); it != arquivoApd->estados.end(); ++it){
+                if(estadoSeguinte->igual(*it)) {
+                    estadoSeguinte = &(*it);
+                    break;
+                }
+            }
+
+            pch = strtok (NULL,",");
+            Simbolo* simboloAEmpilhar = new Simbolo(pch);
+            for (std::list<Simbolo>::iterator it=arquivoApd->alfabetoPilha.begin(); it != arquivoApd->alfabetoPilha.end(); ++it){
+                if(simboloAEmpilhar->igual(*it)) {
+                    simboloAEmpilhar = &(*it);
+                    break;
+                }
+            }
+
+            Transicao transicao(estadoAtual, simboloEntrada, simboloADesempilhar, estadoSeguinte, simboloAEmpilhar);
+            arquivoApd->transicoes.push_back(transicao);
+
+            if(ultimaTransicao) {
+                return new LerEstadoInicial();
+            } else {
+                return new LerTransicoes();
+            }
         }
     };
 
     class LerEstadoInicial : public EstadosLeitura {
-        static EstadosLeitura* ler(ArquivoApd *arquivoApd, string linha) {
+        EstadosLeitura* ler(ArquivoApd *arquivoApd, string linha) {
             std::stringstream estadoStr;
             for ( std::string::iterator it=linha.begin(); it!=linha.end(); ++it) {
                 if( (*it) == ' ' || (*it) == ';') {
@@ -126,10 +181,9 @@ private:
                                 break;
                             }
                         }
-
                     }
 
-                    estadoStr.clear();
+                    estadoStr.str("");
                     if( (*it) == ';') {
                         break;
                     }
@@ -143,7 +197,7 @@ private:
     };
 
     class LerEstadosFinais : public EstadosLeitura {
-        static EstadosLeitura* ler(ArquivoApd *arquivoApd, string linha) {
+        EstadosLeitura* ler(ArquivoApd *arquivoApd, string linha) {
             std::stringstream estadoStr;
             for ( std::string::iterator it=linha.begin(); it!=linha.end(); ++it) {
                 if( (*it) == ' ' || (*it) == ';') {
@@ -158,7 +212,7 @@ private:
                         }
                     }
 
-                    estadoStr.clear();
+                    estadoStr.str("");
                     if( (*it) == ';') {
                         break;
                     }

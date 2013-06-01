@@ -1,4 +1,5 @@
 #include "apd.h"
+#include <iostream>
 
 Apd::Apd()
 {
@@ -32,4 +33,36 @@ void Apd::setEstadoInicial(Estado *estadoInicial)
 void Apd::setEstadosFinais(list<Estado *> estadosFinais)
 {
     this->estadosFinais = estadosFinais;
+}
+
+void Apd::imprimir()
+{
+    cout << "Estados : ";
+    for (std::list<Estado>::iterator it=this->estados.begin(); it != this->estados.end(); ++it){
+        cout << (*it).texto() << " ";
+    }
+
+    cout << ";\nAlfabeto Fita : ";
+    for (std::list<Simbolo>::iterator it=this->alfabetoFita.begin(); it != this->alfabetoFita.end(); ++it){
+        cout << (*it).texto() << " ";
+    }
+
+    cout << "\nAlfabeto Pilha : ";
+    for (std::list<Simbolo>::iterator it=this->alfabetoPilha.begin(); it != this->alfabetoPilha.end(); ++it){
+        cout << (*it).texto() << " ";
+    }
+
+    cout << "\nTransicoes : ";
+    for (std::list<Transicao>::iterator it=this->transicoes.begin(); it != this->transicoes.end(); ++it){
+        cout << (*it).texto() << " ";
+    }
+
+    cout << "\nEstado inicial : ";
+    this->estadoInicial->imprimir();
+
+    cout << "\nEstados finais : ";
+    for (std::list<Estado*>::iterator it=this->estadosFinais.begin(); it != this->estadosFinais.end(); ++it){
+        cout << (*it)->texto() << " ";
+    }
+
 }

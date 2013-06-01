@@ -9,11 +9,14 @@ ArquivoApd::ArquivoApd(string nomeArquivo)
 std::cout << "const " << std::endl;
     EstadosLeitura* estadosLeitura = new LerEstados();
     while(arquivoApd.good()) {
-        getline(arquivoApd, linha);
+        while(linha == "") {
+            getline(arquivoApd, linha);
+        }
         std::cout << "linha = " << linha << std::endl;
         EstadosLeitura* pEstadosLeitura = estadosLeitura;
         estadosLeitura = estadosLeitura->ler(this, linha);
         delete pEstadosLeitura;
+        linha = "";
     }
 
 

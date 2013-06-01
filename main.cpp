@@ -34,6 +34,7 @@ int main()
     cout << "Hello World!" << endl;
 
     ArquivoApd arquivoApd("d:\\devel\\projects\\ftc_tp2\\entrada.apd");
+    arquivoApd.getApd().imprimir();
 
     return 0;
 }
