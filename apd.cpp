@@ -57,12 +57,12 @@ void Apd::imprimir()
         cout << (*it).texto() << " ";
     }
 
-    cout << "\nEstado inicial : ";
-    this->estadoInicial->imprimir();
+    cout << "\nEstado inicial : " << this->estadoInicial->texto();
 
     cout << "\nEstados finais : ";
     for (std::list<Estado*>::iterator it=this->estadosFinais.begin(); it != this->estadosFinais.end(); ++it){
         cout << (*it)->texto() << " ";
     }
 
+    cout << endl;
 }

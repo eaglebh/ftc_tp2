@@ -6,7 +6,6 @@ ArquivoApd::ArquivoApd(string nomeArquivo)
 {
     string linha = "";
     ifstream arquivoApd(nomeArquivo.c_str(), std::ifstream::in);
-std::cout << "const " << std::endl;
     EstadosLeitura* estadosLeitura = new LerEstados();
     while(arquivoApd.good()) {
         while(linha == "") {

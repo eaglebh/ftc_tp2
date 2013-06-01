@@ -1,6 +1,7 @@
 #ifndef TRANSICAO_H
 #define TRANSICAO_H
 
+#include <list>
 #include "estado.h"
 #include "simbolo.h"
 
@@ -12,11 +13,11 @@ private:
     Simbolo* simboloADesempilhar;
 
     Estado* estadoSeguinte;
-    Simbolo* simbolosAEmpilhar;
+    list<Simbolo*> simbolosAEmpilhar;
 
 public:
     Transicao(Estado* estadoAtual, Simbolo* simboloEntrada, Simbolo* simboloADesempilhar,
-              Estado* estadoSeguinte, Simbolo* simbolosAEmpilhar);
+              Estado* estadoSeguinte, list<Simbolo*> simbolosAEmpilhar);
     string texto();
     void imprimir();
 };

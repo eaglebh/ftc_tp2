@@ -12,6 +12,7 @@ public:
     static const char DELTA = 3; // ETX - end of text
 
     Simbolo(string nome);
+    Simbolo(char nome);
     bool igual(const Simbolo outro);
     string texto();
     void imprimir();

@@ -21,10 +21,6 @@ private:
     class EstadosLeitura
     {
     public:
-        /*EstadosLeitura* ler(ArquivoApd *arquivoApd, string linha){
-            std::cout << "padrao " << std::endl;
-        }*/
-
         virtual EstadosLeitura* ler(ArquivoApd *arquivoApd, string linha) = 0;
     };
 
@@ -34,7 +30,6 @@ private:
             for ( std::string::iterator it=linha.begin(); it!=linha.end(); ++it) {
                 if( (*it) == ' ' || (*it) == ';') {
                     if(estado.str() != "") {
-                        std::cout << "estado = " << estado.str() << std::endl;
                         arquivoApd->estados.push_back(Estado(estado.str()));
                     }
 
@@ -137,6 +132,7 @@ private:
                     break;
                 }
             }
+            arquivoApd->alfabetoPilha.push_back(Simbolo(Simbolo::LAMBDA));
 
             pch = strtok (NULL,",");
             Estado* estadoSeguinte = new Estado(pch);
@@ -148,15 +144,20 @@ private:
             }
 
             pch = strtok (NULL,",");
-            Simbolo* simboloAEmpilhar = new Simbolo(pch);
-            for (std::list<Simbolo>::iterator it=arquivoApd->alfabetoPilha.begin(); it != arquivoApd->alfabetoPilha.end(); ++it){
-                if(simboloAEmpilhar->igual(*it)) {
-                    simboloAEmpilhar = &(*it);
-                    break;
+            list<Simbolo*> simbolosAEmpilhar;
+            string simbolosAEmpilharStr(pch);
+            for ( std::string::iterator it=simbolosAEmpilharStr.begin(); it!=simbolosAEmpilharStr.end(); ++it) {
+                Simbolo* simboloAEmpilhar = new Simbolo(*it);
+                for (std::list<Simbolo>::iterator it=arquivoApd->alfabetoPilha.begin(); it != arquivoApd->alfabetoPilha.end(); ++it){
+                    if(simboloAEmpilhar->igual(*it)) {
+                        simboloAEmpilhar = &(*it);
+                        simbolosAEmpilhar.push_back(simboloAEmpilhar);
+                        break;
+                    }
                 }
             }
 
-            Transicao transicao(estadoAtual, simboloEntrada, simboloADesempilhar, estadoSeguinte, simboloAEmpilhar);
+            Transicao transicao(estadoAtual, simboloEntrada, simboloADesempilhar, estadoSeguinte, simbolosAEmpilhar);
             arquivoApd->transicoes.push_back(transicao);
 
             if(ultimaTransicao) {

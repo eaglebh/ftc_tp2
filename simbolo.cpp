@@ -1,11 +1,20 @@
 #include "simbolo.h"
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 
 Simbolo::Simbolo(string nome):
     nome(nome)
 {
+}
+
+Simbolo::Simbolo(char nome)
+{
+    stringstream strstream;
+    strstream << nome;
+
+    this->nome = strstream.str();
 }
 
 bool Simbolo::igual(const Simbolo outro)
