@@ -12,7 +12,8 @@ class Pilha : public stack<Simbolo>
 public:
     Pilha();
     void empilha(Simbolo simbolo);
-    Simbolo desempilha();
+    void desempilha();
+    Simbolo &topo();
 };
 
 #endif // PILHA_H

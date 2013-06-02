@@ -4,10 +4,15 @@
 
 using namespace std;
 
-Transicao::Transicao(Estado *estadoAtual, Simbolo *simboloEntrada, Simbolo *simboloADesemplilhar,
+Transicao::Transicao(Estado *estadoAtual, Simbolo *simboloEntrada, Simbolo *simboloADesempilhar,
                      Estado *estadoSeguinte, list<Simbolo *> simbolosAEmpilhar)
-    :estadoAtual(estadoAtual),simboloEntrada(simboloEntrada), simboloADesempilhar(simboloADesemplilhar),
+    :estadoAtual(estadoAtual),simboloEntrada(simboloEntrada), simboloADesempilhar(simboloADesempilhar),
       estadoSeguinte(estadoSeguinte), simbolosAEmpilhar(simbolosAEmpilhar)
+{
+}
+
+Transicao::Transicao(Estado *estadoAtual, Simbolo *simboloEntrada, Simbolo *simboloADesempilhar)
+:estadoAtual(estadoAtual),simboloEntrada(simboloEntrada), simboloADesempilhar(simboloADesempilhar)
 {
 }
 

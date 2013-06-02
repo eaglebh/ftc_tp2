@@ -15,7 +15,7 @@ Palavra::Palavra(string simbolos)
     simboloAtual = this->simbolos.begin();
 }
 
-Simbolo Palavra::prox()
+Simbolo& Palavra::prox()
 {
     ++simboloAtual;
 

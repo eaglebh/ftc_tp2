@@ -1,4 +1,5 @@
 #include "apd.h"
+#include "palavra.h"
 #include <iostream>
 
 Apd::Apd()
@@ -33,6 +34,41 @@ void Apd::setEstadoInicial(Estado *estadoInicial)
 void Apd::setEstadosFinais(list<Estado *> estadosFinais)
 {
     this->estadosFinais = estadosFinais;
+}
+
+bool Apd::executar(string palavraEntrada)
+{
+    palavra = new Palavra(palavraEntrada);
+    Estado *estadoAtual = this->estadoInicial;
+    Simbolo *proximoSimbolo = &(palavra->prox());
+    Simbolo *desempilhar = &(pilha->topo());
+
+    executarTransicoes(estadoAtual, proximoSimbolo, desempilhar);
+
+    if(proximoSimbolo->igual(Simbolo(Simbolo::DELTA)) && pilha->topo().igual(Simbolo(Simbolo::DELTA)) ) {
+        for (std::list<Estado*>::iterator it=this->estadosFinais.begin(); it != this->estadosFinais.end(); ++it){
+            if(estadoAtual->igual(**it)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+void Apd::executarTransicoes(Estado *estadoAtual, Simbolo *proximoSimbolo, Simbolo *desempilhar)
+{
+    // tenta com proximoSimbolo e topo
+    Transicao *transicao = new Transicao(estadoAtual, proximoSimbolo, desempilhar);
+    // tenta com proximoSimbolo e lambda
+    transicao = new Transicao(estadoAtual, proximoSimbolo, new Simbolo(Simbolo::LAMBDA));
+    // tenta com lambda e topo
+    transicao = new Transicao(estadoAtual, new Simbolo(Simbolo::LAMBDA), desempilhar);
+    // tenta com lambda e lambda
+    transicao = new Transicao(estadoAtual, new Simbolo(Simbolo::LAMBDA), new Simbolo(Simbolo::LAMBDA));
+
+
+    executarTransicoes(estadoAtual, proximoSimbolo, desempilhar);
 }
 
 void Apd::imprimir()

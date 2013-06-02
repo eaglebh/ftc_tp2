@@ -9,11 +9,12 @@ void Pilha::empilha(Simbolo simbolo)
     push(simbolo);
 }
 
-Simbolo Pilha::desempilha()
+void Pilha::desempilha()
 {
-    Simbolo simbolo = top();
-
     pop();
+}
 
-    return simbolo;
+Simbolo& Pilha::topo()
+{
+    return top();
 }

@@ -5,6 +5,8 @@
 #include "simbolo.h"
 #include "estado.h"
 #include "transicao.h"
+#include "palavra.h"
+#include "pilha.h"
 
 class Apd
 {
@@ -18,6 +20,9 @@ private:
     Estado* estadoInicial;
     list<Estado*> estadosFinais;
 
+    Palavra *palavra;
+    Pilha *pilha;
+
 public:
     Apd();
 
@@ -30,7 +35,10 @@ public:
     void setEstadoInicial(Estado* estadoInicial);
     void setEstadosFinais(list<Estado*> estadosFinais);
 
+    bool executar(string palavraEntrada);
+
     void imprimir();
+    void executarTransicoes(Estado *estadoAtual, Simbolo *proximoSimbolo, Simbolo *desempilhar);
 };
 
 #endif // APD_H

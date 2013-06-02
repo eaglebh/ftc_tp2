@@ -15,7 +15,7 @@ private:
 public:
     Palavra(list<Simbolo> simbolos);
     Palavra(string simbolos);
-    Simbolo prox();
+    Simbolo &prox();
 
 };
 
