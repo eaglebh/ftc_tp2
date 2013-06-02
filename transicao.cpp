@@ -16,6 +16,16 @@ Transicao::Transicao(Estado *estadoAtual, Simbolo *simboloEntrada, Simbolo *simb
 {
 }
 
+Estado *Transicao::getEstadoSeguinte()
+{
+    return this->estadoSeguinte;
+}
+
+list<Simbolo *> Transicao::getSimbolosAEmpilhar()
+{
+    return this->simbolosAEmpilhar;
+}
+
 string Transicao::texto()
 {
     stringstream texto;

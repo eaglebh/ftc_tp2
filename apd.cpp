@@ -67,6 +67,16 @@ void Apd::executarTransicoes(Estado *estadoAtual, Simbolo *proximoSimbolo, Simbo
     // tenta com lambda e lambda
     transicao = new Transicao(estadoAtual, new Simbolo(Simbolo::LAMBDA), new Simbolo(Simbolo::LAMBDA));
 
+    if(!proximoSimbolo->igual(Simbolo(Simbolo::LAMBDA))) {
+        proximoSimbolo = &(palavra->prox());
+    }
+
+    if(!desempilhar->igual(Simbolo(Simbolo::LAMBDA))) {
+        pilha->desempilha();
+        desempilhar = &(pilha->topo());
+    }
+    pilha->empilha(transicao->getSimbolosAEmpilhar());
+    estadoAtual = transicao->getEstadoSeguinte();
 
     executarTransicoes(estadoAtual, proximoSimbolo, desempilhar);
 }

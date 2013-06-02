@@ -19,6 +19,10 @@ public:
     Transicao(Estado* estadoAtual, Simbolo* simboloEntrada, Simbolo* simboloADesempilhar,
               Estado* estadoSeguinte, list<Simbolo*> simbolosAEmpilhar);
     Transicao(Estado* estadoAtual, Simbolo* simboloEntrada, Simbolo* simboloADesempilhar);
+
+    Estado *getEstadoSeguinte();
+    list<Simbolo*> getSimbolosAEmpilhar();
+
     string texto();
     void imprimir();
 };
