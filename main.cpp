@@ -34,6 +34,12 @@ int main()
     ArquivoApd arquivoApd("d:\\devel\\projects\\ftc_tp2\\entrada.apd");
     arquivoApd.getApd().imprimir();
 
+    if(arquivoApd.getApd().executar("001110")) {
+        cout << "sim" << endl;
+    } else {
+        cout << "nao" << endl;
+    }
+
     return 0;
 }
 

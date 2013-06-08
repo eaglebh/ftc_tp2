@@ -11,10 +11,11 @@ class Palavra
 private:
     list<Simbolo> simbolos;
     list<Simbolo>::iterator simboloAtual;
+    bool inicializado;
 
 public:
     Palavra(list<Simbolo> simbolos);
-    Palavra(string simbolos);
+    Palavra(const string &l_simbolos);
     Simbolo &prox();
 
 };

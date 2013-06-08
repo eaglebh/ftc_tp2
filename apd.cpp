@@ -1,9 +1,11 @@
 #include "apd.h"
 #include "palavra.h"
 #include <iostream>
+#include <algorithm>
 
 Apd::Apd()
 {
+    pilha = new Pilha();
 }
 
 void Apd::setEstados(list<Estado> estados)
@@ -36,14 +38,15 @@ void Apd::setEstadosFinais(list<Estado *> estadosFinais)
     this->estadosFinais = estadosFinais;
 }
 
-bool Apd::executar(string palavraEntrada)
+bool Apd::executar(const string palavraEntrada)
 {
     palavra = new Palavra(palavraEntrada);
     Estado *estadoAtual = this->estadoInicial;
+    pilha->empilha( Simbolo(Simbolo::DELTA));
     Simbolo *proximoSimbolo = &(palavra->prox());
     Simbolo *desempilhar = &(pilha->topo());
 
-    executarTransicoes(estadoAtual, proximoSimbolo, desempilhar);
+    executarTransicoes(estadoAtual, *proximoSimbolo, *desempilhar);
 
     if(proximoSimbolo->igual(Simbolo(Simbolo::DELTA)) && pilha->topo().igual(Simbolo(Simbolo::DELTA)) ) {
         for (std::list<Estado*>::iterator it=this->estadosFinais.begin(); it != this->estadosFinais.end(); ++it){
@@ -56,28 +59,76 @@ bool Apd::executar(string palavraEntrada)
     return false;
 }
 
-void Apd::executarTransicoes(Estado *estadoAtual, Simbolo *proximoSimbolo, Simbolo *desempilhar)
+bool Apd::procuraTransicaoProxSimboloTopo(Estado estadoAtual, Transicao &transicao, Simbolo &proximoSimbolo, Simbolo &desempilhar) {
+    if (!procuraTransicao(estadoAtual, transicao, proximoSimbolo, desempilhar)) {
+        // tenta com proximoSimbolo e Lambda
+        return procuraTransicaoProxSimboloLambda(estadoAtual, transicao, proximoSimbolo, desempilhar);
+    }
+    return true;
+}
+
+
+bool Apd::procuraTransicaoProxSimboloLambda(Estado estadoAtual, Transicao &transicao, Simbolo &proximoSimbolo, Simbolo &desempilhar) {
+    desempilhar = Simbolo(Simbolo::LAMBDA);
+    if (!procuraTransicao(estadoAtual, transicao, proximoSimbolo, desempilhar)) {
+        // tenta com lambda e topo
+        return procuraTransicaoLambdaTopo(estadoAtual, transicao, proximoSimbolo, desempilhar);
+    }
+    return true;
+}
+
+bool Apd::procuraTransicaoLambdaTopo(Estado estadoAtual, Transicao &transicao, Simbolo &proximoSimbolo, Simbolo &desempilhar) {
+    proximoSimbolo = Simbolo(Simbolo::LAMBDA);
+    if (!procuraTransicao(estadoAtual, transicao, proximoSimbolo, desempilhar)) {
+        // tenta com lambda e lambda
+        return procuraTransicaoLambdaLambda(estadoAtual, transicao, proximoSimbolo, desempilhar);
+    }
+    return true;
+}
+
+bool Apd::procuraTransicaoLambdaLambda(Estado estadoAtual, Transicao &transicao, Simbolo &proximoSimbolo, Simbolo &desempilhar) {
+    proximoSimbolo = Simbolo(Simbolo::LAMBDA);
+    desempilhar = Simbolo(Simbolo::LAMBDA);
+    if(!procuraTransicao(estadoAtual, transicao, proximoSimbolo, desempilhar)) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+bool Apd::procuraTransicao(Estado estadoAtual, Transicao &transicao, Simbolo &simboloEntrada, Simbolo &desempilhar)
+{
+    transicao = Transicao(&estadoAtual, &simboloEntrada, &desempilhar);
+    std::list<Transicao>::iterator findIter = std::find(this->transicoes.begin(), this->transicoes.end(), transicao);
+    if(findIter == this->transicoes.end()){
+        cout << "nao encontrou transicao: " << estadoAtual.texto() << " " << simboloEntrada.texto() << " " << desempilhar.texto() << endl;
+        return false;
+    } else {
+        cout << "encontrou transicao: " << (*findIter).texto() << endl;
+        transicao = (*findIter);
+        return true;
+    }
+}
+
+void Apd::executarTransicoes(Estado *estadoAtual, Simbolo &proximoSimbolo, Simbolo &desempilhar)
 {
     // tenta com proximoSimbolo e topo
-    Transicao *transicao = new Transicao(estadoAtual, proximoSimbolo, desempilhar);
-    // tenta com proximoSimbolo e lambda
-    transicao = new Transicao(estadoAtual, proximoSimbolo, new Simbolo(Simbolo::LAMBDA));
-    // tenta com lambda e topo
-    transicao = new Transicao(estadoAtual, new Simbolo(Simbolo::LAMBDA), desempilhar);
-    // tenta com lambda e lambda
-    transicao = new Transicao(estadoAtual, new Simbolo(Simbolo::LAMBDA), new Simbolo(Simbolo::LAMBDA));
-
-    if(!proximoSimbolo->igual(Simbolo(Simbolo::LAMBDA))) {
-        proximoSimbolo = &(palavra->prox());
+    Transicao *transicao = new Transicao(estadoAtual, &proximoSimbolo, &desempilhar);
+    if(!procuraTransicaoProxSimboloTopo(*estadoAtual, *transicao, proximoSimbolo, desempilhar)){
+        return;
     }
 
-    if(!desempilhar->igual(Simbolo(Simbolo::LAMBDA))) {
+    if(!proximoSimbolo.igual(Simbolo(Simbolo::LAMBDA))) {
+        proximoSimbolo = palavra->prox();
+    }
+
+    if(!desempilhar.igual(Simbolo(Simbolo::LAMBDA))) {
         pilha->desempilha();
-        desempilhar = &(pilha->topo());
     }
     pilha->empilha(transicao->getSimbolosAEmpilhar());
     estadoAtual = transicao->getEstadoSeguinte();
 
+    desempilhar = pilha->topo();
     executarTransicoes(estadoAtual, proximoSimbolo, desempilhar);
 }
 
@@ -95,7 +146,9 @@ void Apd::imprimir()
 
     cout << "\nAlfabeto Pilha : ";
     for (std::list<Simbolo>::iterator it=this->alfabetoPilha.begin(); it != this->alfabetoPilha.end(); ++it){
-        cout << (*it).texto() << " ";
+        if(!Simbolo(Simbolo::LAMBDA).igual(*it)) {
+            cout << (*it).texto() << " ";
+        }
     }
 
     cout << "\nTransicoes : ";

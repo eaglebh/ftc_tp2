@@ -12,8 +12,14 @@ Transicao::Transicao(Estado *estadoAtual, Simbolo *simboloEntrada, Simbolo *simb
 }
 
 Transicao::Transicao(Estado *estadoAtual, Simbolo *simboloEntrada, Simbolo *simboloADesempilhar)
-:estadoAtual(estadoAtual),simboloEntrada(simboloEntrada), simboloADesempilhar(simboloADesempilhar)
+    :estadoAtual(estadoAtual),simboloEntrada(simboloEntrada), simboloADesempilhar(simboloADesempilhar)
 {
+}
+
+bool Transicao::operator==(const Transicao &other) const {
+    return (this->estadoAtual->igual(*other.estadoAtual) &&
+            this->simboloEntrada->igual(*other.simboloEntrada) &&
+            this->simboloADesempilhar->igual(*other.simboloADesempilhar) );
 }
 
 Estado *Transicao::getEstadoSeguinte()

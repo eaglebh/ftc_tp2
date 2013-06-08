@@ -86,6 +86,7 @@ private:
 
                 simbolo << *it;
             }
+            arquivoApd->alfabetoPilha.push_back(Simbolo(Simbolo::LAMBDA));
             return new LerTransicoes();
         }
     };
@@ -104,7 +105,8 @@ private:
                 linha.erase(linha.length()-1,1);
             }
 
-            char * c_linha = (char*)linha.c_str();
+            string s_linha = linha;
+            char * c_linha = (char*)s_linha.c_str();
             char * pch = strtok (c_linha,",");
 
             Estado* estadoAtual = new Estado(pch);
@@ -132,7 +134,6 @@ private:
                     break;
                 }
             }
-            arquivoApd->alfabetoPilha.push_back(Simbolo(Simbolo::LAMBDA));
 
             pch = strtok (NULL,",");
             Estado* estadoSeguinte = new Estado(pch);

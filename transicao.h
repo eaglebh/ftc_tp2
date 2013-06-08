@@ -25,6 +25,7 @@ public:
 
     string texto();
     void imprimir();
+    bool operator ==(const Transicao &other) const;
 };
 
 #endif // TRANSICAO_H

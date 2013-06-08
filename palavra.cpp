@@ -3,21 +3,27 @@
 Palavra::Palavra(list<Simbolo> simbolos) :
     simbolos(simbolos)
 {
-    simboloAtual = this->simbolos.begin();
+    inicializado = false;
 }
 
-Palavra::Palavra(string simbolos)
+Palavra::Palavra(const string &l_simbolos)
 {
-    for(int i=0; i < simbolos.length(); ++i) {
-        this->simbolos.push_front(Simbolo(simbolos.substr(i, 1)));
+    for(int i=0; i < l_simbolos.length(); ++i) {
+        string simbolo = l_simbolos.substr(i, 1);
+        this->simbolos.push_back(Simbolo(simbolo));
     }
 
-    simboloAtual = this->simbolos.begin();
+    inicializado = false;
 }
 
 Simbolo& Palavra::prox()
 {
-    ++simboloAtual;
+    if(!inicializado) {
+        simboloAtual = this->simbolos.begin();
+        inicializado = true;
+        return *simboloAtual;
+    }
+    advance(simboloAtual,1);
 
     if(simboloAtual != simbolos.end()) {
         return *simboloAtual;

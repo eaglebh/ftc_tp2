@@ -35,10 +35,15 @@ public:
     void setEstadoInicial(Estado* estadoInicial);
     void setEstadosFinais(list<Estado*> estadosFinais);
 
-    bool executar(string palavraEntrada);
+    bool executar(const string palavraEntrada);
 
     void imprimir();
-    void executarTransicoes(Estado *estadoAtual, Simbolo *proximoSimbolo, Simbolo *desempilhar);
+    void executarTransicoes(Estado *estadoAtual, Simbolo &proximoSimbolo, Simbolo &desempilhar);
+    bool procuraTransicaoLambdaLambda(Estado estadoAtual, Transicao &transicao, Simbolo &proximoSimbolo, Simbolo &desempilhar);
+    bool procuraTransicao(Estado estadoAtual, Transicao &transicao, Simbolo &simboloEntrada, Simbolo &desempilhar);
+    bool procuraTransicaoProxSimboloTopo(Estado estadoAtual, Transicao &transicao, Simbolo &proximoSimbolo, Simbolo &desempilhar);
+    bool procuraTransicaoProxSimboloLambda(Estado estadoAtual, Transicao &transicao, Simbolo &proximoSimbolo, Simbolo &desempilhar);
+    bool procuraTransicaoLambdaTopo(Estado estadoAtual, Transicao &transicao, Simbolo &proximoSimbolo, Simbolo &desempilhar);
 };
 
 #endif // APD_H
