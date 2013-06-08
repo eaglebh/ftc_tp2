@@ -41,7 +41,7 @@ void Apd::setEstadosFinais(list<Estado *> estadosFinais)
 bool Apd::executar(const string palavraEntrada)
 {
     palavra = new Palavra(palavraEntrada);
-    Estado *estadoAtual = this->estadoInicial;
+    Estado estadoAtual(*this->estadoInicial);
     pilha->empilha( Simbolo(Simbolo::DELTA));
     Simbolo proximoSimbolo = palavra->prox();
     Simbolo desempilhar = pilha->topo();
@@ -50,7 +50,7 @@ bool Apd::executar(const string palavraEntrada)
 
     if(proximoSimbolo.igual(Simbolo(Simbolo::DELTA)) && pilha->topo().igual(Simbolo(Simbolo::DELTA)) ) {
         for (std::list<Estado*>::iterator it=this->estadosFinais.begin(); it != this->estadosFinais.end(); ++it){
-            if(estadoAtual->igual(**it)) {
+            if(estadoAtual.igual(**it)) {
                 return true;
             }
         }
@@ -113,15 +113,15 @@ bool Apd::procuraTransicao(Estado estadoAtual, Transicao &transicao, Simbolo &si
     }
 }
 
-void Apd::executarTransicoes(Estado *estadoAtual, Simbolo &proximoSimbolo, Simbolo &desempilhar)
+void Apd::executarTransicoes(Estado &estadoAtual, Simbolo &proximoSimbolo, Simbolo &desempilhar)
 {
     // tenta com proximoSimbolo e topo
     Simbolo simboloNaoUtilizado(proximoSimbolo);
-    Transicao *transicao = new Transicao(estadoAtual, &proximoSimbolo, &desempilhar);
-    if(!procuraTransicaoProxSimboloTopo(*estadoAtual, *transicao, proximoSimbolo, desempilhar)){
+    Transicao *transicao = new Transicao(&estadoAtual, &proximoSimbolo, &desempilhar);
+    if(!procuraTransicaoProxSimboloTopo(estadoAtual, *transicao, proximoSimbolo, desempilhar)){
         return;
     }
-    cout << "[" << estadoAtual->texto() << ", " << palavra->texto() << ", " << pilha->texto() <<"] "<< transicao->texto() << endl;
+    cout << "[" << estadoAtual.texto() << ", " << palavra->texto() << ", " << pilha->texto() <<"] "<< transicao->texto() << endl;
     if(!proximoSimbolo.igual(Simbolo(Simbolo::LAMBDA))) {
         proximoSimbolo = palavra->prox();
     } else {
@@ -132,7 +132,7 @@ void Apd::executarTransicoes(Estado *estadoAtual, Simbolo &proximoSimbolo, Simbo
         pilha->desempilha();
     }
     pilha->empilha(transicao->getSimbolosAEmpilhar());
-    estadoAtual = transicao->getEstadoSeguinte();
+    estadoAtual = *transicao->getEstadoSeguinte();
 
     desempilhar = pilha->topo();
     executarTransicoes(estadoAtual, proximoSimbolo, desempilhar);

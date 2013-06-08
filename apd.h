@@ -38,7 +38,7 @@ public:
     bool executar(const string palavraEntrada);
 
     void imprimir();
-    void executarTransicoes(Estado *estadoAtual, Simbolo &proximoSimbolo, Simbolo &desempilhar);
+    void executarTransicoes(Estado &estadoAtual, Simbolo &proximoSimbolo, Simbolo &desempilhar);
     bool procuraTransicaoLambdaLambda(Estado estadoAtual, Transicao &transicao, Simbolo &proximoSimbolo, Simbolo &desempilhar);
     bool procuraTransicao(Estado estadoAtual, Transicao &transicao, Simbolo &simboloEntrada, Simbolo &desempilhar);
     bool procuraTransicaoProxSimboloTopo(Estado estadoAtual, Transicao &transicao, Simbolo &proximoSimbolo, Simbolo &desempilhar);

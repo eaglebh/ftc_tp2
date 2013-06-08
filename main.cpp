@@ -29,12 +29,19 @@ retorne não
 fimse
  */
 
-int main()
+int main(int argc, char* argv[])
 {
-    ArquivoApd arquivoApd("d:\\devel\\projects\\ftc_tp2\\entrada.apd");
+    if (argc < 3) {
+        cerr << "Uso: " << argv[0] << " arquivoComAPD palavraEntrada" << endl;
+        return -1;
+    } else {
+        cout << "arquivoApd: " << argv[1] << "\npalavra: " << argv[2] << endl;
+    }
+
+    ArquivoApd arquivoApd(argv[1]);
     arquivoApd.getApd().imprimir();
 
-    if(arquivoApd.getApd().executar("001110")) {
+    if(arquivoApd.getApd().executar(argv[2])) {
         cout << "sim" << endl;
     } else {
         cout << "nao" << endl;
