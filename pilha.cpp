@@ -11,7 +11,7 @@ void Pilha::empilha(Simbolo simbolo)
 {
     if(!simbolo.igual(Simbolo(Simbolo::LAMBDA))) {
         push(simbolo);
-        pilhaTexto.append(simbolo.texto());
+        pilhaTexto.insert(0, simbolo.texto());
     }
 }
 
@@ -28,7 +28,7 @@ void Pilha::desempilha()
         return;
     }
     pop();
-    pilhaTexto.erase(pilhaTexto.length()-1, 1);
+    pilhaTexto.erase(0, 1);
 }
 
 Simbolo Pilha::topo()
