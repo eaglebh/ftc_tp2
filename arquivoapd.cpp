@@ -9,7 +9,9 @@ ArquivoApd::ArquivoApd(string nomeArquivo)
     EstadosLeitura* estadosLeitura = new LerEstados();
     while(arquivoApd.good()) {
         while(linha == "") {
-            getline(arquivoApd, linha);
+            if(!getline(arquivoApd, linha)) {
+                return;
+            }
         }
         std::cout << "linha = " << linha << std::endl;
         EstadosLeitura* pEstadosLeitura = estadosLeitura;
