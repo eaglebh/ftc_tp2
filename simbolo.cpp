@@ -24,11 +24,13 @@ bool Simbolo::igual(const Simbolo outro)
 
 string Simbolo::texto()
 {
+#ifdef __unix__
     if(this->nome.at(0) == LAMBDA) {
         return "\u03BB";
     } else if(this->nome.at(0) == DELTA) {
         return "\u0394";
     }
+#endif
     return this->nome;
 }
 

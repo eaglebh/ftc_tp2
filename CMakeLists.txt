@@ -6,11 +6,6 @@ add_executable(${PROJECT_NAME} ${SRC_LIST})
 
 set(CMAKE_BUILD_TYPE Debug)
 
-set(CMAKE_EXE_LINKER_FLAGS
-"${CMAKE_EXE_LINKER_FLAGS} -Wl,-enable-auto-import"
-)
-
-set(
-CMAKE_SHARED_LIBRARY_CXX_FLAGS
-"${CMAKE_SHARED_LIBRARY_CXX_FLAGS} -Wl,--enable-auto-import "
-)
+IF(WIN32)
+set(CMAKE_EXE_LINKER_FLAGS -Wl,-enable-auto-import)
+ENDIF(WIN32)

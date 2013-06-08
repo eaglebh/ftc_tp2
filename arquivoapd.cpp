@@ -19,8 +19,6 @@ ArquivoApd::ArquivoApd(string nomeArquivo)
         delete pEstadosLeitura;
         linha = "";
     }
-
-
 }
 
 Apd ArquivoApd::getApd()
