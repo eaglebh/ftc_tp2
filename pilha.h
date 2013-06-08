@@ -10,14 +10,15 @@ using namespace std;
 class Pilha : public stack<Simbolo>
 {
 private:
-    string texto;
+    string pilhaTexto;
 public:
     Pilha();
     void empilha(Simbolo simbolo);
     void empilha(list<Simbolo *> simbolos);
     void desempilha();
-    Simbolo &topo();
+    Simbolo topo();
     void imprime();
+    string texto();
 };
 
 #endif // PILHA_H

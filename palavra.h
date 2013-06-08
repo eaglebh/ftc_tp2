@@ -18,6 +18,8 @@ public:
     Palavra(const string &l_simbolos);
     Simbolo &prox();
 
+    void imprime();
+    string texto();
 };
 
 #endif // PALAVRA_H

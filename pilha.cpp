@@ -11,9 +11,8 @@ void Pilha::empilha(Simbolo simbolo)
 {
     if(!simbolo.igual(Simbolo(Simbolo::LAMBDA))) {
         push(simbolo);
-        texto.append(simbolo.texto());
+        pilhaTexto.append(simbolo.texto());
     }
-    imprime();
 }
 
 void Pilha::empilha(list<Simbolo*> simbolos)
@@ -25,16 +24,23 @@ void Pilha::empilha(list<Simbolo*> simbolos)
 
 void Pilha::desempilha()
 {
+    if(topo().igual(Simbolo(Simbolo::DELTA))) {
+        return;
+    }
     pop();
-    texto.erase(texto.length()-1, 1);
-    imprime();
+    pilhaTexto.erase(pilhaTexto.length()-1, 1);
 }
 
-Simbolo& Pilha::topo()
+Simbolo Pilha::topo()
 {
-    return top();
+    Simbolo topoPilha = top();
+    return topoPilha;
+}
+
+string Pilha::texto(){
+    return pilhaTexto;
 }
 
 void Pilha::imprime() {
-    cout << "pilha: [" << texto << "]" << endl;
+    cout << "pilha: [" << texto() << "]" << endl;
 }

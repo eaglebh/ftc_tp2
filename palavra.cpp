@@ -1,4 +1,8 @@
 #include "palavra.h"
+#include <iostream>
+#include <sstream>
+
+using namespace std;
 
 Palavra::Palavra(list<Simbolo> simbolos) :
     simbolos(simbolos)
@@ -27,5 +31,23 @@ Simbolo& Palavra::prox()
 
     if(simboloAtual != simbolos.end()) {
         return *simboloAtual;
+    } else {
+        Simbolo *simbolo = new Simbolo(Simbolo::DELTA);
+        return *simbolo;
     }
+
+}
+
+string Palavra::texto() {
+    stringstream texto;
+    for(list<Simbolo>::iterator it = simboloAtual; it != simbolos.end(); ++it) {
+        texto << (*it).texto();
+    }
+    return texto.str();
+}
+
+void Palavra::imprime() {
+    cout << "palavra: ";
+    cout << texto();
+    cout << endl;
 }
