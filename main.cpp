@@ -1,5 +1,5 @@
 #include <iostream>
-
+#include <fstream>
 #include "arquivoapd.h"
 
 using namespace std;
@@ -31,17 +31,30 @@ fimse
 
 int main(int argc, char* argv[])
 {
-    if (argc < 3) {
+    string palavraEntrada = "";
+    if (argc < 2) {
         cerr << "Uso: " << argv[0] << " arquivoComAPD palavraEntrada" << endl;
         return -1;
     } else {
-        cout << "arquivoApd: " << argv[1] << "\npalavra: " << argv[2] << endl;
+        ifstream arqEntrada(argv[1]);
+        if (!arqEntrada.good())
+        {
+            cerr << "Arquivo de entrada inválido!" << endl;
+            return -1;
+        }
+        if(argc > 2) {
+            palavraEntrada = string(argv[2]);
+            if(palavraEntrada == "_") {
+                palavraEntrada = "";
+            }
+        }
+        //cout << "arquivoApd: " << argv[1] << "\npalavra: " << palavraEntrada << endl;
     }
 
     ArquivoApd arquivoApd(argv[1]);
-    arquivoApd.getApd().imprimir();
+    //arquivoApd.getApd().imprimir();
 
-    if(arquivoApd.getApd().executar(argv[2])) {
+    if(arquivoApd.getApd().executar(palavraEntrada)) {
         cout << "sim" << endl;
     } else {
         cout << "nao" << endl;

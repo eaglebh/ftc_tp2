@@ -1,0 +1,12 @@
+ap fp;
+t ( ) + - ;
+X ;
+
+(ap,(,_,ap,X) ,
+(ap,t,_,fp,_) ,
+(fp,),X,fp,_) ,
+(fp,+,_,ap,_) ,
+(fp,-,_,ap,_) ;
+
+ap ; inicial
+fp ; finais

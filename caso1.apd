@@ -1,0 +1,8 @@
+0 1 ; //estados
+0 1 ; //alfabeto
+X ; // alfabeto da pilha
+(0,0,_,0,XX) ,
+(0,1,X,1,_) ,
+(1,1,X,1,_) ;
+0 ;  //estado inicial
+0 1 ; //estados finais

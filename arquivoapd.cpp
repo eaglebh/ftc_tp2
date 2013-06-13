@@ -13,7 +13,7 @@ ArquivoApd::ArquivoApd(string nomeArquivo)
                 return;
             }
         }
-        std::cout << "linha = " << linha << std::endl;
+        //std::cout << "linha = " << linha << std::endl;
         EstadosLeitura* pEstadosLeitura = estadosLeitura;
         estadosLeitura = estadosLeitura->ler(this, linha);
         delete pEstadosLeitura;
