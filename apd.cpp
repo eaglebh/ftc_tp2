@@ -121,7 +121,7 @@ void Apd::executarTransicoes(Estado &estadoAtual, Simbolo &proximoSimbolo, Simbo
     if(!procuraTransicaoProxSimboloTopo(estadoAtual, *transicao, proximoSimbolo, desempilhar)){
         return;
     }
-    cout << "[" << estadoAtual.texto() << ", " << palavra->texto() << ", " << pilha->texto() <<"] "<< transicao->texto() << endl;
+//    cout << "[" << estadoAtual.texto() << ", " << palavra->texto() << ", " << pilha->texto() <<"] "<< transicao->texto() << endl;
     if(!proximoSimbolo.igual(Simbolo(Simbolo::LAMBDA))) {
         proximoSimbolo = palavra->prox();
     } else {
