@@ -23,9 +23,15 @@ Palavra::Palavra(const string &l_simbolos)
 Simbolo& Palavra::prox()
 {
     if(!inicializado) {
-        simboloAtual = this->simbolos.begin();
-        inicializado = true;
-        return *simboloAtual;
+        if(this->simbolos.size() > 0) {
+            inicializado = true;
+            simboloAtual = this->simbolos.begin();
+            return *simboloAtual;
+        } else {
+            inicializado = false;
+            Simbolo *simbolo = new Simbolo(Simbolo::DELTA);
+            return *simbolo;
+        }
     }
     advance(simboloAtual,1);
 
@@ -40,8 +46,10 @@ Simbolo& Palavra::prox()
 
 string Palavra::texto() {
     stringstream texto;
-    for(list<Simbolo>::iterator it = simboloAtual; it != simbolos.end(); ++it) {
-        texto << (*it).texto();
+    if(simbolos.size() > 0) {
+        for(list<Simbolo>::iterator it = simboloAtual; it != simbolos.end(); ++it) {
+            texto << (*it).texto();
+        }
     }
     return texto.str();
 }
